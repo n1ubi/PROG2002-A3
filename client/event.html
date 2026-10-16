@@ -3,20 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Event Details | CityCare Events</title>
+  <title>Event Details | GreatLove Events</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- Navigation - present on all pages -->
-  <nav>
-    <div class="brand">CityCare <span>Events</span></div>
-    <ul>
-      <li><a href="index.html">Home</a></li>
-      <li><a href="search.html">Search Events</a></li>
-    </ul>
-  </nav>
+  <!-- ===== Header + Nav (common, rendered once in common.js) ===== -->
+  <header class="site-header" id="site-header"></header>
 
+  <!-- ===== Body (page-specific content) ===== -->
   <main class="container">
     <h2 class="page-title">Event Details</h2>
 
@@ -26,8 +21,10 @@
     </div>
   </main>
 
-  <footer>&copy; 2026 GreatLove Organization. All rights reserved.</footer>
+  <!-- ===== Footer (common, rendered once in common.js) ===== -->
+  <footer id="site-footer"></footer>
 
+  <script src="js/common.js"></script>
   <script src="js/event.js"></script>
 </body>
 </html>

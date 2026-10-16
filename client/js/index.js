@@ -1,39 +1,34 @@
-/*
+/**
  * index.js
- * Home page: fetches events from the API and renders the upcoming ones.
-*/
+ * Home page: fetches events from the API and renders them into three groups
+ * (ongoing, upcoming, completed).
+ */
 
 const API_BASE = 'http://localhost:3000/api';
 
-/*
- * Load events from the API and render the cards
-*/
+/**
+ * Load events from the API and render the cards into the three sections.
+ */
 async function loadEvents() {
   const container = document.getElementById('event-list');
 
   try {
-/*
- * 1. Send the GET request to the API
-*/
+    /* 1. Send the GET request to the API */
     const response = await fetch(API_BASE + '/events');
 
-/*
- * 2. Check the response status
-*/
+    /* 2. Check the response status */
     if (!response.ok) {
       throw new Error('Server returned ' + response.status);
     }
 
-/*
- * 3. Parse the JSON from the response body
-*/
+    /* 3. Parse the JSON from the response body */
     const events = await response.json();
 
-/*
- * 4. Split the events into ongoing, upcoming and past groups.
- * An event with progress_percent > 0 is treated as "ongoing" (fundraising in
- * progress); completed events show a full progress bar.
-*/
+    /*
+     * 4. Split the events into ongoing, upcoming and past groups.
+     * An event with progress_percent > 0 is treated as "ongoing" (fundraising in
+     * progress); completed events show a full progress bar.
+     */
     const ongoing = events.filter(function (e) {
       return e.status !== 'past' && e.progress_percent > 0;
     });
@@ -44,25 +39,25 @@ async function loadEvents() {
       return e.status === 'past';
     });
 
-/*
- * 5. Render all three lists into the DOM
-*/
+    /* 5. Render all three lists into the DOM */
     renderEvents(ongoing, 'event-list-ongoing', 'No fundraising campaigns in progress right now.');
     renderEvents(upcoming, 'event-list', 'No upcoming events right now. Check back soon!');
     renderEvents(past, 'event-list-past', 'No completed events to show yet.', true);
   } catch (err) {
-/*
- * 6. Show an error message to the user
-*/
+    /* 6. Show an error message to the user */
     container.innerHTML =
       '<div class="error-box">Sorry, we could not load the events. ' +
       'Please make sure the API server is running. (' + err.message + ')</div>';
   }
 }
 
-/*
- * Build one card per event; showProgress adds a fundraising progress bar
-*/
+/**
+ * Build one card per event and inject them into the target container.
+ * @param {Array} events - list of event objects from the API
+ * @param {string} containerId - id of the DOM element to render the cards into
+ * @param {string} emptyText - message shown when the events list is empty
+ * @param {boolean} showProgress - whether to display the fundraising progress bar
+ */
 function renderEvents(events, containerId, emptyText, showProgress) {
   const container = document.getElementById(containerId);
 
@@ -100,9 +95,11 @@ function renderEvents(events, containerId, emptyText, showProgress) {
   container.innerHTML = html;
 }
 
-/*
- * Prevent XSS when inserting API data into the page
-*/
+/**
+ * Escape HTML special characters to prevent XSS when inserting API data.
+ * @param {string} text - raw text from the API response
+ * @returns {string} HTML-safe text
+ */
 function escapeHtml(text) {
   if (text === null || text === undefined) return '';
   return String(text)
@@ -112,7 +109,5 @@ function escapeHtml(text) {
     .replace(/"/g, '&quot;');
 }
 
-/*
- * Run when the page loads
-*/
+/* Run when the page loads */
 loadEvents();

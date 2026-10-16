@@ -8,49 +8,48 @@
 </head>
 <body>
 
-  <!-- Navigation - present on all pages -->
-  <nav>
-    <div class="brand">GreatLove <span>Events</span></div>
-    <ul>
-      <li><a href="index.html" class="active">Home</a></li>
-      <li><a href="search.html">Search Events</a></li>
-    </ul>
-  </nav>
+  <!-- ===== Header + Nav (common, rendered once in common.js) ===== -->
+  <header class="site-header" id="site-header"></header>
 
-  <!-- Hero - static information about the organisation -->
-  <header class="hero">
-    <h1>Little things, great love</h1>
-    <p class="mission">"Concentrating on transparent and reliable charitable activities"</p>
-    <p style="color: #F8D5D2">Thank you for your efforts.</p>
-    <p class="contact">Email: 2077330636@qq.com &nbsp;|&nbsp; Phone: 176 9188 8888</p>
-  </header>
+  <!-- ===== Body (page-specific content) ===== -->
+  <main>
+    <!-- Hero - static information about the organisation -->
+    <header class="hero">
+      <h1>Little things, great love</h1>
+      <p class="mission">"Concentrating on transparent and reliable charitable activities"</p>
+      <p style="color: #F8D5D2">Thank you for your efforts.</p>
+      <p class="contact">Email: 2077330636@qq.com &nbsp;|&nbsp; Phone: 176 9188 8888</p>
+    </header>
 
-  <main class="container">
-    <!-- Ongoing events, rendered from the API -->
-    <section class="ongoing-section">
-      <h2 class="page-title">Ongoing Charity Events</h2>
-      <p class="page-subtitle">Fundraising is in progress — help us reach the goal.</p>
-      <div id="event-list-ongoing" class="card-grid"></div>
-    </section>
+    <div class="container">
+      <!-- Ongoing events, rendered from the API -->
+      <section class="ongoing-section">
+        <h2 class="page-title">Ongoing Charity Events</h2>
+        <p class="page-subtitle">Fundraising is in progress — help us reach the goal.</p>
+        <div id="event-list-ongoing" class="card-grid"></div>
+      </section>
 
-    <h2 class="page-title">Upcoming Charity Events</h2>
-    <p class="page-subtitle">Browse the events below and click one to see full details.</p>
+      <h2 class="page-title">Upcoming Charity Events</h2>
+      <p class="page-subtitle">Browse the events below and click one to see full details.</p>
 
-    <!-- Dynamic event list, rendered from the API -->
-    <div id="event-list" class="card-grid">
-      <p class="info-box">Loading events…</p>
+      <!-- Dynamic event list, rendered from the API -->
+      <div id="event-list" class="card-grid">
+        <p class="info-box">Loading events…</p>
+      </div>
+
+      <!-- Past events, rendered from the API -->
+      <section class="past-section">
+        <h2 class="page-title">Completed Charity Events</h2>
+        <p class="page-subtitle">Events we have already held — thank you to everyone who joined.</p>
+        <div id="event-list-past" class="card-grid past-grid"></div>
+      </section>
     </div>
-
-    <!-- Past events, rendered from the API -->
-    <section class="past-section">
-      <h2 class="page-title">Completed Charity Events</h2>
-      <p class="page-subtitle">Events we have already held — thank you to everyone who joined.</p>
-      <div id="event-list-past" class="card-grid past-grid"></div>
-    </section>
   </main>
 
-  <footer>&copy; 2026 GreatLove Organization. All rights reserved.<br /> <br /> <i> --Lonnie </i></footer>
+  <!-- ===== Footer (common, rendered once in common.js) ===== -->
+  <footer id="site-footer"></footer>
 
+  <script src="js/common.js"></script>
   <script src="js/index.js"></script>
 </body>
 </html>

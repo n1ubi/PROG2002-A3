@@ -18,8 +18,8 @@ body {
   line-height: 1.6;
 }
 
-/* ---------- Navigation (present on all pages) ---------- */
-nav {
+/* ---------- Header + Nav (common, rendered by common.js on all pages) ---------- */
+.site-header {
   background: #0d5c3f;
   color: #fff;
   padding: 0 24px;
@@ -29,24 +29,24 @@ nav {
   flex-wrap: wrap;
 }
 
-nav .brand {
+.site-header .brand {
   font-size: 20px;
   font-weight: 700;
   letter-spacing: 0.5px;
   padding: 14px 0;
 }
 
-nav .brand span {
+.site-header .brand span {
   color: #ffd479;
 }
 
-nav ul {
+.site-header nav ul {
   list-style: none;
   display: flex;
   gap: 8px;
 }
 
-nav ul li a {
+.site-header nav ul li a {
   display: block;
   color: #fff;
   text-decoration: none;
@@ -55,11 +55,11 @@ nav ul li a {
   font-weight: 600;
 }
 
-nav ul li a:hover {
+.site-header nav ul li a:hover {
   background: #0a4a34;
 }
 
-nav ul li a.active {
+.site-header nav ul li a.active {
   background: #e8a33d;
   color: #fff;
 }
@@ -455,12 +455,12 @@ footer {
 
 /* ---------- Small screens ---------- */
 @media (max-width: 600px) {
-  nav {
+  .site-header {
     flex-direction: column;
     text-align: center;
     padding: 12px;
   }
-  nav ul li a {
+  .site-header nav ul li a {
     padding: 10px 12px;
   }
   .hero h1 {

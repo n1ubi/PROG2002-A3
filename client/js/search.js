@@ -1,14 +1,14 @@
-/*
+/**
  * search.js
- * Search page: loads categories into the filter form, then queries the
- * API with the selected criteria and renders the matching events.
-*/
+ * Search page: loads categories into the filter form, then queries the API
+ * with the selected criteria and renders the matching events.
+ */
 
 const API_BASE = 'http://localhost:3000/api';
 
-/*
- * 1. Load event categories from the API into the dropdown
-*/
+/**
+ * 1. Load event categories from the API into the dropdown.
+ */
 async function loadCategories() {
   const select = document.getElementById('category');
   try {
@@ -16,9 +16,7 @@ async function loadCategories() {
     if (!response.ok) throw new Error('Server returned ' + response.status);
     const categories = await response.json();
 
-/*
- * Build one <option> per category using DOM manipulation
-*/
+    /* Build one <option> per category using DOM manipulation */
     categories.forEach(function (c) {
       const option = document.createElement('option');
       option.value = c.category_id;
@@ -31,42 +29,35 @@ async function loadCategories() {
   }
 }
 
-/*
- * 2. Run the search when the Search button is clicked
-*/
+/**
+ * 2. Run the search when the Search button is clicked.
+ * Reads the filter form, validates the input, calls the API and renders results.
+ */
 async function searchEvents() {
   const message = document.getElementById('message');
   const results = document.getElementById('results');
   message.innerHTML = '';
   results.innerHTML = '';
 
-/*
- * Read the form values
-*/
+  /* Read the form values */
   const date = document.getElementById('date').value.trim();
   const location = document.getElementById('location').value.trim();
   const category = document.getElementById('category').value;
 
-/*
- * Validate the date format (YYYY-MM-DD) before sending it to the API
-*/
+  /* Validate the date format (YYYY-MM-DD) before sending it to the API */
   if (date && !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
     message.innerHTML =
       '<div class="error-box">Please enter the date in YYYY-MM-DD format (e.g. 2026-10-18).</div>';
     return;
   }
 
-/*
- * Build the query string - only include filled-in criteria
-*/
+  /* Build the query string - only include filled-in criteria */
   const params = new URLSearchParams();
   if (date) params.append('date', date);
   if (location) params.append('location', location);
   if (category) params.append('category', category);
 
-/*
- * Validate: at least one criterion must be selected
-*/
+  /* Validate: at least one criterion must be selected */
   if (params.toString() === '') {
     message.innerHTML =
       '<div class="error-box">Please select at least one filter (date, location or category).</div>';
@@ -74,9 +65,7 @@ async function searchEvents() {
   }
 
   try {
-/*
- * Call the API endpoint with the query string
-*/
+    /* Call the API endpoint with the query string */
     const response = await fetch(API_BASE + '/events?' + params.toString());
     if (!response.ok) throw new Error('Server returned ' + response.status);
     const events = await response.json();
@@ -86,9 +75,7 @@ async function searchEvents() {
       return;
     }
 
-/*
- * Render the matching events
-*/
+    /* Render the matching events */
     let html = '';
     events.forEach(function (e) {
       html += `
@@ -111,18 +98,20 @@ async function searchEvents() {
   }
 }
 
-/*
- * 3. Clear Filters: reset every form field and hide the results
-*/
+/**
+ * 3. Clear Filters: reset every form field and hide the results.
+ */
 function clearFilters() {
   document.getElementById('search-form').reset();
   document.getElementById('message').innerHTML = '';
   document.getElementById('results').innerHTML = '';
 }
 
-/*
- * Prevent XSS when inserting API data into the page
-*/
+/**
+ * Escape HTML special characters to prevent XSS when inserting API data.
+ * @param {string} text - raw text from the API response
+ * @returns {string} HTML-safe text
+ */
 function escapeHtml(text) {
   if (text === null || text === undefined) return '';
   return String(text)
@@ -132,9 +121,7 @@ function escapeHtml(text) {
     .replace(/"/g, '&quot;');
 }
 
-/*
- * Wire up the buttons and load the categories on page load
-*/
+/* Wire up the buttons and load the categories on page load */
 document.getElementById('search-btn').addEventListener('click', searchEvents);
 document.getElementById('clear-btn').addEventListener('click', clearFilters);
 loadCategories();

@@ -1,22 +1,23 @@
-/*
+/**
  * event.js
  * Event detail page: reads the event id from the URL query string,
  * fetches the full details from the API, and renders them.
-*/
+ */
 
 const API_BASE = 'http://localhost:3000/api';
 
-/*
- * 1. Read the event id passed via the URL
-*/
+/**
+ * 1. Read the event id passed via the URL query string.
+ * @returns {string|null} the event id, or null if none was provided
+ */
 function getEventId() {
   const params = new URLSearchParams(window.location.search);
   return params.get('id');
 }
 
-/*
- * 2. Fetch and render the event details
-*/
+/**
+ * 2. Fetch and render the event details from the API.
+ */
 async function loadEvent() {
   const container = document.getElementById('event-detail');
   const id = getEventId();
@@ -28,9 +29,7 @@ async function loadEvent() {
   }
 
   try {
-/*
- * Fetch the single event from the API
-*/
+    /* Fetch the single event from the API */
     const response = await fetch(API_BASE + '/events/' + id);
     if (response.status === 404) {
       container.innerHTML = '<div class="error-box">Event not found. It may have been removed.</div>';
@@ -40,17 +39,11 @@ async function loadEvent() {
 
     const e = await response.json();
 
-/*
- * Render the full details
-*/
+    /* Render the full details */
     const priceText = e.ticket_price == 0 ? 'Free entry' : '$' + e.ticket_price;
-/*
- * Goal vs Progress
-*/
+    /* Goal vs Progress */
     const goalText = e.goal_amount != null ? '$' + Number(e.goal_amount).toLocaleString() : 'Not announced';
-/*
- * Fundraising progress
-*/
+    /* Fundraising progress */
     const progress = Math.min(Number(e.progress_percent) || 0, 100);
     const statusText = e.status === 'past'
       ? 'Past event'
@@ -58,9 +51,7 @@ async function loadEvent() {
     const progressLabel = e.status === 'past'
       ? '100% funded — completed'
       : progress + '% funded';
-/*
- * Register button: completed events show a greyed-out disabled button
-*/
+    /* Register button: completed events show a greyed-out disabled button */
     const registerBtnHtml = e.status === 'past'
       ? '<button class="btn btn-warm" id="register-btn" disabled>Event Completed</button>'
       : '<button class="btn btn-warm" id="register-btn">&#9829; Register for this event</button>';
@@ -94,10 +85,10 @@ async function loadEvent() {
       </article>
     `;
 
-/*
- * 3. Wire up the Register button - shows a placeholder message for this
- *    assessment. Completed events have a disabled button, so no handler.
-*/
+    /*
+     * 3. Wire up the Register button - shows a placeholder message for this
+     *    assessment. Completed events have a disabled button, so no handler.
+     */
     const registerBtn = document.getElementById('register-btn');
     if (registerBtn && !registerBtn.disabled) {
       registerBtn.addEventListener('click', function () {
@@ -110,9 +101,11 @@ async function loadEvent() {
   }
 }
 
-/*
- * Prevent XSS when inserting API data into the page
-*/
+/**
+ * Escape HTML special characters to prevent XSS when inserting API data.
+ * @param {string} text - raw text from the API response
+ * @returns {string} HTML-safe text
+ */
 function escapeHtml(text) {
   if (text === null || text === undefined) return '';
   return String(text)
@@ -122,7 +115,5 @@ function escapeHtml(text) {
     .replace(/"/g, '&quot;');
 }
 
-/*
- * Run when the page loads
-*/
+/* Run when the page loads */
 loadEvent();
