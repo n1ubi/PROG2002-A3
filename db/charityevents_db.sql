@@ -1,7 +1,7 @@
 -- ============================================================
--- PROG2002 Assessment 2 - Charity Events Database
+-- PROG2002 Assessment 3 - Charity Events Database
 -- Database: charityevents_db
--- Schema: organisations, categories, events
+-- Schema: organisations, categories, events, registrations
 -- ============================================================
 
 CREATE DATABASE IF NOT EXISTS charityevents_db
@@ -13,6 +13,7 @@ USE charityevents_db;
 
 -- Table: organisations (charity organisations that host events)
 -- ------------------------------------------------------------
+DROP TABLE IF EXISTS registrations;
 DROP TABLE IF EXISTS events;
 DROP TABLE IF EXISTS categories;
 DROP TABLE IF EXISTS organisations;
@@ -58,6 +59,24 @@ CREATE TABLE events (
 ) ENGINE=InnoDB;
 
 
+-- Table: registrations (users who signed up for an event)
+-- One user may register for multiple events, but can only register for the
+-- same event once (enforced by the UNIQUE key on event_id + user_email).
+-- ------------------------------------------------------------
+CREATE TABLE registrations (
+  registration_id    INT AUTO_INCREMENT PRIMARY KEY,
+  event_id           INT NOT NULL,
+  user_name          VARCHAR(100) NOT NULL,
+  user_email         VARCHAR(100) NOT NULL,
+  user_phone         VARCHAR(30),
+  tickets_purchased  INT NOT NULL DEFAULT 1,
+  registration_date  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_registrations_event
+    FOREIGN KEY (event_id) REFERENCES events(event_id) ON DELETE CASCADE,
+  UNIQUE KEY uk_event_user (event_id, user_email)
+) ENGINE=InnoDB;
+
+
 -- Sample data
 -- ------------------------------------------------------------
 INSERT INTO organisations (org_name, org_description, contact_email, contact_phone) VALUES
@@ -81,3 +100,20 @@ INSERT INTO events (event_name, event_description, event_date, event_time, locat
 ('Que''er Hill Winter Warmth Concert', 'An intimate winter concert raising funds for heating and blankets for families in Liubei District.', '2026-08-20', '19:00:00', 'Que''er Hill Park', 'Liubei', 25000.00, 100, 40.00, '/images/event-7.jpg', 4, 1),
 ('Liunan Evening Silent Auction', 'An evening auction with local crafts and food tastings to support community shelters.', '2026-07-25', '17:30:00', 'Liunan Cultural Square', 'Liunan', 18000.00, 100, 0.00, '/images/event-8.jpg', 3, 2),
 ('Liujiang District Festive Fun Run', 'A festive-themed fun run in December, with prizes for best costume.', '2026-12-20', '07:30:00', 'Liujiang Sports Park', 'Liujiang', 22000.00, 0, 25.00, '/images/event-9.jpg', 2, 1);
+
+
+-- Sample data: registrations (at least 10, spread across several events)
+-- ------------------------------------------------------------
+INSERT INTO registrations (event_id, user_name, user_email, user_phone, tickets_purchased, registration_date) VALUES
+(2, 'Chen Wei',      'chenwei@example.com',      '138 7721 0001', 2, '2026-09-20 10:15:00'),
+(2, 'Li Na',        'lina@example.com',        '139 7721 0002', 1, '2026-09-25 14:40:00'),
+(2, 'Zhang Yu',     'zhangyu@example.com',     '137 7721 0003', 4, '2026-10-01 09:05:00'),
+(4, 'Wang Fang',    'wangfang@example.com',    '136 7721 0004', 2, '2026-10-05 19:22:00'),
+(4, 'Liu Yang',     'liuyang@example.com',     '135 7721 0005', 1, '2026-10-12 20:01:00'),
+(9, 'Huang Min',    'huangmin@example.com',    '134 7721 0006', 3, '2026-10-08 11:30:00'),
+(9, 'Zhao Lei',     'zhaolei@example.com',     '133 7721 0007', 2, '2026-10-15 16:45:00'),
+(1, 'Sun Jie',      'sunjie@example.com',      '132 7721 0008', 2, '2026-10-10 18:00:00'),
+(1, 'Zhou Yan',     'zhouyan@example.com',     '131 7721 0009', 1, '2026-10-18 13:20:00'),
+(3, 'Wu Hao',       'wuhao@example.com',        '130 7721 0010', 2, '2026-10-20 21:10:00'),
+(3, 'Xu Jing',      'xujing@example.com',      '158 7721 0011', 1, '2026-10-25 15:55:00'),
+(5, 'Ma Qiang',     'maqiang@example.com',      '159 7721 0012', 2, '2026-09-28 08:30:00');

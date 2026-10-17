@@ -2,6 +2,7 @@
  * event_db.js
  * MySQL database connection for the charity events website.
  * Uses a connection pool, which is better than a single connection for web apps.
+ * Serves all four tables: organisations, categories, events, registrations.
  */
 const mysql = require('mysql2');
 
