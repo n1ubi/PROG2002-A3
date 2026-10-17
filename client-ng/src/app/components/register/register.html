@@ -1,0 +1,40 @@
+<main class="container register-container">
+  <h2 class="page-title">Register for an Event</h2>
+
+  <div class="detail-card" *ngIf="event">
+    <span class="category-tag">{{ event.category_name }}</span>
+    <h3>{{ event.event_name }}</h3>
+    <p class="meta">📅 {{ event.event_date }}{{ event.event_time ? ' at ' + (event.event_time | slice:0:5) : '' }}</p>
+    <p class="meta">📍 {{ event.location }}, {{ event.district }}</p>
+    <p class="price">Ticket: ${{ event.ticket_price }}</p>
+  </div>
+
+  <p class="error-box" *ngIf="error">{{ error }}</p>
+
+  <form class="register-form" (ngSubmit)="submit()" *ngIf="event">
+    <h3>Your details</h3>
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="name">Full Name *</label>
+        <input id="name" type="text" [(ngModel)]="model.name" name="name" placeholder="Your full name">
+      </div>
+      <div class="form-group">
+        <label for="email">Email *</label>
+        <input id="email" type="email" [(ngModel)]="model.email" name="email" placeholder="you@example.com">
+      </div>
+      <div class="form-group">
+        <label for="phone">Phone</label>
+        <input id="phone" type="text" [(ngModel)]="model.phone" name="phone" placeholder="e.g. 138 0000 0000">
+      </div>
+      <div class="form-group">
+        <label for="tickets">Number of Tickets *</label>
+        <input id="tickets" type="number" [(ngModel)]="model.tickets" name="tickets" min="1">
+      </div>
+    </div>
+  </form>
+
+  <div class="form-actions" *ngIf="event">
+    <button class="btn btn-warm" type="button" (click)="submit()">♥ Confirm Registration</button>
+    <a class="btn btn-ghost" [routerLink]="['/event', event.event_id]">Cancel</a>
+  </div>
+</main>

@@ -1,0 +1,80 @@
+<section class="hero">
+  <h1>Little things, great love</h1>
+  <p class="mission">"Concentrating on transparent and reliable charitable activities"</p>
+  <p style="color: #F8D5D2">Thank you for your efforts.</p>
+  <p class="contact">Email: 2077330636@qq.com &nbsp;|&nbsp; Phone: 176 9188 8888</p>
+</section>
+
+<div class="container">
+  <p *ngIf="loading" class="info-box">Loading events…</p>
+  <p *ngIf="error" class="error-box">{{ error }}</p>
+
+  <!-- Ongoing events -->
+  <section class="ongoing-section">
+    <h2 class="page-title">Ongoing Charity Events</h2>
+    <p class="page-subtitle">Fundraising is in progress — help us reach the goal.</p>
+    <div class="card-grid">
+      <ng-container *ngIf="ongoing.length; else noOngoing">
+        <article class="event-card" *ngFor="let e of ongoing">
+          <img class="event-card-img" [src]="e.image_url" [alt]="e.event_name" onerror="this.style.display='none'">
+          <span class="category-tag">{{ e.category_name }}</span>
+          <h3>{{ e.event_name }}</h3>
+          <p class="meta">📅 {{ e.event_date }} at {{ shortTime(e.event_time) }}</p>
+          <p class="meta">📍 {{ e.location }}, {{ e.district }}</p>
+          <p class="meta">Hosted by {{ e.org_name }}</p>
+          <p class="price">{{ formatPrice(e.ticket_price) }}</p>
+          <div class="card-progress">
+            <div class="progress-bar"><div class="progress-fill" [style.width.%]="e.progress_percent"></div></div>
+            <span class="progress-label">{{ e.progress_percent >= 100 ? '100% funded — completed' : (e.progress_percent || 0) + '% funded' }}</span>
+          </div>
+          <a class="btn" [routerLink]="['/event', e.event_id]">View Details</a>
+        </article>
+      </ng-container>
+      <ng-template #noOngoing><p class="info-box">No fundraising campaigns in progress right now.</p></ng-template>
+    </div>
+  </section>
+
+  <!-- Upcoming events -->
+  <h2 class="page-title">Upcoming Charity Events</h2>
+  <p class="page-subtitle">Browse the events below and click one to see full details.</p>
+  <div class="card-grid">
+    <ng-container *ngIf="upcoming.length; else noUpcoming">
+      <article class="event-card" *ngFor="let e of upcoming">
+        <img class="event-card-img" [src]="e.image_url" [alt]="e.event_name" onerror="this.style.display='none'">
+        <span class="category-tag">{{ e.category_name }}</span>
+        <h3>{{ e.event_name }}</h3>
+        <p class="meta">📅 {{ e.event_date }} at {{ shortTime(e.event_time) }}</p>
+        <p class="meta">📍 {{ e.location }}, {{ e.district }}</p>
+        <p class="meta">Hosted by {{ e.org_name }}</p>
+        <p class="price">{{ formatPrice(e.ticket_price) }}</p>
+        <a class="btn" [routerLink]="['/event', e.event_id]">View Details</a>
+      </article>
+    </ng-container>
+    <ng-template #noUpcoming><p class="info-box">No upcoming events right now. Check back soon!</p></ng-template>
+  </div>
+
+  <!-- Completed events -->
+  <section class="past-section">
+    <h2 class="page-title">Completed Charity Events</h2>
+    <p class="page-subtitle">Events we have already held — thank you to everyone who joined.</p>
+    <div class="card-grid past-grid">
+      <ng-container *ngIf="past.length; else noPast">
+        <article class="event-card" *ngFor="let e of past">
+          <img class="event-card-img" [src]="e.image_url" [alt]="e.event_name" onerror="this.style.display='none'">
+          <span class="category-tag">{{ e.category_name }}</span>
+          <h3>{{ e.event_name }}</h3>
+          <p class="meta">📅 {{ e.event_date }} at {{ shortTime(e.event_time) }}</p>
+          <p class="meta">📍 {{ e.location }}, {{ e.district }}</p>
+          <p class="meta">Hosted by {{ e.org_name }}</p>
+          <p class="price">{{ formatPrice(e.ticket_price) }}</p>
+          <div class="card-progress">
+            <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
+            <span class="progress-label">100% funded — completed</span>
+          </div>
+          <a class="btn" [routerLink]="['/event', e.event_id]">View Details</a>
+        </article>
+      </ng-container>
+      <ng-template #noPast><p class="info-box">No completed events to show yet.</p></ng-template>
+    </div>
+  </section>
+</div>

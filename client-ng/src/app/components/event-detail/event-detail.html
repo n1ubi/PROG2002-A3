@@ -1,0 +1,54 @@
+<main class="container">
+  <h2 class="page-title">Event Details</h2>
+
+  <p *ngIf="loading" class="info-box">Loading event…</p>
+  <p *ngIf="error" class="error-box">{{ error }}</p>
+
+  <article class="detail-card" *ngIf="event">
+    <img class="detail-img" [src]="event.image_url" [alt]="event.event_name" onerror="this.style.display='none'">
+    <span class="category-tag">{{ event.category_name }}</span>
+    <h2>{{ event.event_name }}</h2>
+    <p class="meta">Hosted by {{ event.org_name }}</p>
+
+    <div class="detail-meta">
+      <p><strong>Date:</strong> {{ event.event_date }}</p>
+      <p><strong>Time:</strong> {{ event.event_time ? (event.event_time | slice:0:5) : 'To be announced' }}</p>
+      <p><strong>Location:</strong> {{ event.location }}, {{ event.district }}</p>
+      <p><strong>Status:</strong> {{ statusText() }}</p>
+    </div>
+
+    <p class="description">{{ event.event_description }}</p>
+
+    <div class="goal-progress">
+      <p><strong>Fundraising Goal:</strong> {{ goalText() }}</p>
+      <div class="bar"><div class="bar-fill" [style.width.%]="progressPercent()"></div></div>
+      <div class="labels"><span>Goal</span><span>{{ progressLabel() }}</span></div>
+    </div>
+
+    <div class="register-box">
+      <span class="price">{{ priceText() }}</span>
+      <ng-container *ngIf="event.status === 'past'; else registerLink">
+        <button class="btn btn-warm" disabled>Event Completed</button>
+      </ng-container>
+      <ng-template #registerLink>
+        <a class="btn btn-warm" [routerLink]="['/register']" [queryParams]="{ id: event.event_id }">&#9829; Register for this event</a>
+      </ng-template>
+    </div>
+
+    <section class="registrations-section">
+      <h3>Who has registered ({{ event.registrations?.length || 0 }})</h3>
+      <p class="info-box" *ngIf="!event.registrations?.length">No registrations yet — be the first to sign up!</p>
+      <table class="reg-table" *ngIf="event.registrations?.length">
+        <thead><tr><th>Name</th><th>Email</th><th>Tickets</th><th>Registered on</th></tr></thead>
+        <tbody>
+          <tr *ngFor="let r of event.registrations">
+            <td>{{ r.user_name }}</td>
+            <td>{{ r.user_email }}</td>
+            <td>{{ r.tickets_purchased }}</td>
+            <td>{{ r.registration_date }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </article>
+</main>

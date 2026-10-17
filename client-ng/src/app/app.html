@@ -1,0 +1,19 @@
+<!-- ===== Header + Nav (common to every page) ===== -->
+<header class="site-header">
+  <div class="brand" routerLink="/" style="cursor:pointer">GreatLove <span>Events</span></div>
+  <nav>
+    <ul>
+      <li><a routerLink="/">Home</a></li>
+      <li><a routerLink="/search">Search Events</a></li>
+    </ul>
+  </nav>
+</header>
+
+<!-- ===== Page-specific content ===== -->
+<router-outlet />
+
+<!-- ===== Footer (common to every page) ===== -->
+<footer>
+  <p>&copy; 2026 GreatLove Organization. All rights reserved.</p>
+  <p><i>--Lonnie</i></p>
+</footer>
