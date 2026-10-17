@@ -51,10 +51,33 @@ async function loadEvent() {
     const progressLabel = e.status === 'past'
       ? '100% funded — completed'
       : progress + '% funded';
-    /* Register button: completed events show a greyed-out disabled button */
+    /* Register button: completed events show a greyed-out disabled button;
+       upcoming events link to the dedicated registration page */
     const registerBtnHtml = e.status === 'past'
-      ? '<button class="btn btn-warm" id="register-btn" disabled>Event Completed</button>'
-      : '<button class="btn btn-warm" id="register-btn">&#9829; Register for this event</button>';
+      ? '<button class="btn btn-warm" disabled>Event Completed</button>'
+      : '<a class="btn btn-warm" href="register.html?id=' + e.event_id + '">&#9829; Register for this event</a>';
+
+    /* Build the list of registrations for this event (already newest-first) */
+    const regs = e.registrations || [];
+    let regListHtml;
+    if (regs.length === 0) {
+      regListHtml = '<p class="info-box">No registrations yet — be the first to sign up!</p>';
+    } else {
+      let rows = '';
+      regs.forEach(function (r) {
+        rows +=
+          '<tr>' +
+          '<td>' + escapeHtml(r.user_name) + '</td>' +
+          '<td>' + escapeHtml(r.user_email) + '</td>' +
+          '<td>' + r.tickets_purchased + '</td>' +
+          '<td>' + r.registration_date + '</td>' +
+          '</tr>';
+      });
+      regListHtml =
+        '<table class="reg-table"><thead><tr>' +
+        '<th>Name</th><th>Email</th><th>Tickets</th><th>Registered on</th>' +
+        '</tr></thead><tbody>' + rows + '</tbody></table>';
+    }
 
     container.innerHTML = `
       <article class="detail-card">
@@ -82,19 +105,13 @@ async function loadEvent() {
           <span class="price">${priceText}</span>
           ${registerBtnHtml}
         </div>
+
+        <section class="registrations-section">
+          <h3>Who has registered (${regs.length})</h3>
+          ${regListHtml}
+        </section>
       </article>
     `;
-
-    /*
-     * 3. Wire up the Register button - shows a placeholder message for this
-     *    assessment. Completed events have a disabled button, so no handler.
-     */
-    const registerBtn = document.getElementById('register-btn');
-    if (registerBtn && !registerBtn.disabled) {
-      registerBtn.addEventListener('click', function () {
-        alert('This feature is currently under construction.');
-      });
-    }
   } catch (err) {
     container.innerHTML =
       '<div class="error-box">Could not load the event: ' + escapeHtml(err.message) + '. Is the API server running?</div>';

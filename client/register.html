@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register for an Event | GreatLove Events</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ===== Header + Nav (common, rendered once in common.js) ===== -->
+  <header class="site-header" id="site-header"></header>
+
+  <!-- ===== Body (page-specific content) ===== -->
+  <main class="container register-container">
+    <h2 class="page-title">Register for an Event</h2>
+
+    <!-- Selected event summary, loaded from the API -->
+    <div id="event-summary">
+      <p class="info-box">Loading event…</p>
+    </div>
+
+    <!-- Registration form -->
+    <form class="register-form" id="register-form">
+      <h3>Your details</h3>
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="user-name">Full Name *</label>
+          <input type="text" id="user-name" placeholder="Your full name">
+        </div>
+        <div class="form-group">
+          <label for="user-email">Email *</label>
+          <input type="email" id="user-email" placeholder="you@example.com">
+        </div>
+        <div class="form-group">
+          <label for="user-phone">Phone</label>
+          <input type="text" id="user-phone" placeholder="e.g. 138 0000 0000">
+        </div>
+        <div class="form-group">
+          <label for="tickets">Number of Tickets *</label>
+          <input type="number" id="tickets" min="1" value="1">
+        </div>
+      </div>
+    </form>
+
+    <div class="form-actions">
+      <button class="btn btn-warm" id="submit-btn" type="button">&#9829; Confirm Registration</button>
+      <a class="btn btn-ghost" id="cancel-btn">Cancel</a>
+    </div>
+
+    <div id="message"></div>
+  </main>
+
+  <!-- ===== Footer (common, rendered once in common.js) ===== -->
+  <footer id="site-footer"></footer>
+
+  <script src="js/common.js"></script>
+  <script src="js/register.js"></script>
+</body>
+</html>
