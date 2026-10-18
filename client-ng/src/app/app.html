@@ -3,8 +3,9 @@
   <div class="brand" routerLink="/" style="cursor:pointer">GreatLove <span>Events</span></div>
   <nav>
     <ul>
-      <li><a routerLink="/">Home</a></li>
-      <li><a routerLink="/search">Search Events</a></li>
+      <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Home</a></li>
+      <li><a routerLink="/search" routerLinkActive="active">Search Events</a></li>
+      <li><a routerLink="/admin" routerLinkActive="active">Admin</a></li>
     </ul>
   </nav>
 </header>

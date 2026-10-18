@@ -54,4 +54,29 @@ export class EventService {
       `${API_BASE}/registrations`, payload
     );
   }
+
+  /**
+   * Create a new event (admin).
+   * @param payload event fields
+   */
+  createEvent(payload: Partial<CharityEvent>): Observable<CharityEvent> {
+    return this.http.post<CharityEvent>(`${API_BASE}/events`, payload);
+  }
+
+  /**
+   * Update an existing event (admin).
+   * @param id event id
+   * @param payload fields to update
+   */
+  updateEvent(id: number, payload: Partial<CharityEvent>): Observable<CharityEvent> {
+    return this.http.put<CharityEvent>(`${API_BASE}/events/${id}`, payload);
+  }
+
+  /**
+   * Delete an event (admin). Returns 409 if it has registrations.
+   * @param id event id
+   */
+  deleteEvent(id: number): Observable<{ message: string }> {
+    return this.http.delete<{ message: string }>(`${API_BASE}/events/${id}`);
+  }
 }
