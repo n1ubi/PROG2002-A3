@@ -5,6 +5,28 @@
   <p class="contact">Email: 2077330636@qq.com &nbsp;|&nbsp; Phone: 176 9188 8888</p>
 </section>
 
+<!-- Weather widget for Liuzhou -->
+<div class="weather-widget" *ngIf="weather">
+  <div class="weather-current">
+    <span class="weather-icon">{{ describe(weather.current.weather_code).icon }}</span>
+    <div>
+      <div class="weather-temp">{{ weather.current.temperature_2m | number:'1.0-0' }}°C</div>
+      <div class="weather-desc">{{ describe(weather.current.weather_code).label }} · Liuzhou</div>
+    </div>
+    <div class="weather-extras">
+      💧 {{ weather.current.relative_humidity_2m }}% &nbsp;·&nbsp; 💨 {{ weather.current.wind_speed_10m }} km/h
+    </div>
+  </div>
+  <div class="weather-daily">
+    <div class="day" *ngFor="let day of weather.daily.time; let i = index">
+      <div class="day-name">{{ i === 0 ? 'Today' : shortDay(day) }}</div>
+      <div class="day-icon">{{ describe(weather.daily.weather_code[i]).icon }}</div>
+      <div class="day-temp">{{ weather.daily.temperature_2m_max[i] | number:'1.0-0' }}° / {{ weather.daily.temperature_2m_min[i] | number:'1.0-0' }}°</div>
+    </div>
+  </div>
+</div>
+<p *ngIf="weatherError" class="weather-fallback">Weather data unavailable right now.</p>
+
 <div class="container">
   <p *ngIf="loading" class="info-box">Loading events…</p>
   <p *ngIf="error" class="error-box">{{ error }}</p>

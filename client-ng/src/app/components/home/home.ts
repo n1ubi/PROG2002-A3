@@ -1,11 +1,12 @@
 /**
  * Home page: fetches events from the API and renders them into three groups
- * (ongoing, upcoming, completed), matching the original static site.
+ * (ongoing, upcoming, completed), plus a live weather widget for Liuzhou.
  */
 import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { EventService } from '../../services/event.service';
+import { WeatherService, WeatherResponse } from '../../services/weather.service';
 import { CharityEvent } from '../../models/event';
 
 @Component({
@@ -17,6 +18,7 @@ import { CharityEvent } from '../../models/event';
 })
 export class HomeComponent implements OnInit {
   private eventService = inject(EventService);
+  private weatherService = inject(WeatherService);
   private cdr = inject(ChangeDetectorRef);
 
   ongoing: CharityEvent[] = [];
@@ -24,6 +26,10 @@ export class HomeComponent implements OnInit {
   past: CharityEvent[] = [];
   loading = true;
   error = '';
+
+  /** Weather widget state. */
+  weather: WeatherResponse | null = null;
+  weatherError = false;
 
   ngOnInit(): void {
     this.eventService.getEvents().subscribe({
@@ -40,6 +46,17 @@ export class HomeComponent implements OnInit {
         this.cdr.detectChanges();
       }
     });
+
+    this.weatherService.getLiuzhouWeather().subscribe({
+      next: (data) => {
+        this.weather = data;
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.weatherError = true;
+        this.cdr.detectChanges();
+      }
+    });
   }
 
   formatPrice(price: number | string): string {
@@ -49,5 +66,16 @@ export class HomeComponent implements OnInit {
 
   shortTime(t: string | null | undefined): string {
     return t ? t.slice(0, 5) : '';
+  }
+
+  /** WMO code -> emoji + label for the template. */
+  describe(code: number): { icon: string; label: string } {
+    return WeatherService.describe(code);
+  }
+
+  /** Format an ISO date (2026-10-18) as a short weekday like "Sun". */
+  shortDay(iso: string): string {
+    const d = new Date(iso + 'T00:00:00');
+    return d.toLocaleDateString('en-US', { weekday: 'short' });
   }
 }
